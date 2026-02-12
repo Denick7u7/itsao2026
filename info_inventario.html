@@ -1,0 +1,846 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Desarrollo Full Stack | DSH-2502</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700;800&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-primary: #0a0e27;
+            --bg-secondary: #151936;
+            --bg-card: #1e2447;
+            --accent-cyan: #00d9ff;
+            --accent-purple: #a855f7;
+            --accent-orange: #ff6b35;
+            --text-primary: #f0f4f8;
+            --text-secondary: #9ca3af;
+            --text-muted: #6b7280;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Outfit', sans-serif;
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        /* Animated background */
+        .bg-animation {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            opacity: 0.15;
+            background: 
+                radial-gradient(circle at 20% 30%, var(--accent-purple) 0%, transparent 50%),
+                radial-gradient(circle at 80% 70%, var(--accent-cyan) 0%, transparent 50%),
+                radial-gradient(circle at 50% 50%, var(--accent-orange) 0%, transparent 50%);
+            filter: blur(80px);
+            animation: bgMove 20s ease-in-out infinite;
+        }
+
+        @keyframes bgMove {
+            0%, 100% { transform: scale(1) rotate(0deg); }
+            50% { transform: scale(1.2) rotate(5deg); }
+        }
+
+        /* Header */
+        header {
+            padding: 2rem 5%;
+            background: rgba(21, 25, 54, 0.5);
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid rgba(0, 217, 255, 0.1);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            animation: slideDown 0.8s ease-out;
+        }
+
+        @keyframes slideDown {
+            from {
+                transform: translateY(-100%);
+                opacity: 0;
+            }
+            to {
+                transform: translateY(0);
+                opacity: 1;
+            }
+        }
+
+        .header-content {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 1.5rem;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .logo-icon {
+            width: 50px;
+            height: 50px;
+            background: linear-gradient(135deg, var(--accent-cyan), var(--accent-purple));
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-family: 'JetBrains Mono', monospace;
+            font-weight: 800;
+            font-size: 1.5rem;
+            box-shadow: 0 4px 20px rgba(0, 217, 255, 0.3);
+        }
+
+        .logo-text h1 {
+            font-size: 1.5rem;
+            font-weight: 800;
+            background: linear-gradient(135deg, var(--accent-cyan), var(--accent-purple));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .course-code {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+            background: var(--bg-card);
+            padding: 0.4rem 1rem;
+            border-radius: 20px;
+            border: 1px solid rgba(0, 217, 255, 0.2);
+        }
+
+        /* Hero Section */
+        .hero {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 5rem 5% 3rem;
+            animation: fadeInUp 1s ease-out 0.2s backwards;
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .hero-title {
+            font-size: 4rem;
+            font-weight: 800;
+            line-height: 1.1;
+            margin-bottom: 1.5rem;
+            background: linear-gradient(135deg, var(--text-primary), var(--accent-cyan));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .hero-subtitle {
+            font-size: 1.3rem;
+            color: var(--text-secondary);
+            max-width: 800px;
+            margin-bottom: 2rem;
+        }
+
+        .hero-stats {
+            display: flex;
+            gap: 2rem;
+            flex-wrap: wrap;
+            margin-top: 2rem;
+        }
+
+        .stat {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .stat-value {
+            font-size: 2.5rem;
+            font-weight: 800;
+            color: var(--accent-cyan);
+            font-family: 'JetBrains Mono', monospace;
+        }
+
+        .stat-label {
+            font-size: 0.9rem;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        /* Main Content */
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 5% 5rem;
+        }
+
+        .section {
+            margin-bottom: 5rem;
+            animation: fadeInUp 1s ease-out backwards;
+        }
+
+        .section:nth-child(1) { animation-delay: 0.3s; }
+        .section:nth-child(2) { animation-delay: 0.4s; }
+        .section:nth-child(3) { animation-delay: 0.5s; }
+        .section:nth-child(4) { animation-delay: 0.6s; }
+
+        .section-header {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            margin-bottom: 2rem;
+        }
+
+        .section-number {
+            width: 50px;
+            height: 50px;
+            background: linear-gradient(135deg, var(--accent-purple), var(--accent-orange));
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 800;
+            font-size: 1.5rem;
+            font-family: 'JetBrains Mono', monospace;
+        }
+
+        .section-title {
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: var(--text-primary);
+        }
+
+        .card {
+            background: var(--bg-card);
+            border-radius: 16px;
+            padding: 2rem;
+            border: 1px solid rgba(0, 217, 255, 0.1);
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 3px;
+            background: linear-gradient(90deg, var(--accent-cyan), var(--accent-purple), var(--accent-orange));
+            transform: scaleX(0);
+            transform-origin: left;
+            transition: transform 0.3s ease;
+        }
+
+        .card:hover::before {
+            transform: scaleX(1);
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+            border-color: rgba(0, 217, 255, 0.3);
+            box-shadow: 0 10px 40px rgba(0, 217, 255, 0.1);
+        }
+
+        .card p {
+            color: var(--text-secondary);
+            font-size: 1.1rem;
+            line-height: 1.8;
+        }
+
+        /* Competencias */
+        .competencia-list {
+            display: grid;
+            gap: 1.5rem;
+            margin-top: 2rem;
+        }
+
+        .competencia-item {
+            background: var(--bg-card);
+            padding: 1.5rem;
+            border-radius: 12px;
+            border-left: 4px solid var(--accent-cyan);
+            transition: all 0.3s ease;
+        }
+
+        .competencia-item:hover {
+            border-left-color: var(--accent-purple);
+            transform: translateX(10px);
+            box-shadow: 0 5px 20px rgba(168, 85, 247, 0.2);
+        }
+
+        .competencia-item strong {
+            color: var(--accent-cyan);
+            font-size: 1.1rem;
+        }
+
+        .competencia-item p {
+            color: var(--text-secondary);
+            margin-top: 0.5rem;
+        }
+
+        /* Temario */
+        .topics-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            margin-top: 2rem;
+        }
+
+        .topic-card {
+            background: var(--bg-card);
+            border-radius: 16px;
+            padding: 2rem;
+            border: 1px solid rgba(0, 217, 255, 0.1);
+            transition: all 0.4s ease;
+            position: relative;
+        }
+
+        .topic-card::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, transparent, rgba(0, 217, 255, 0.05));
+            border-radius: 16px;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .topic-card:hover::after {
+            opacity: 1;
+        }
+
+        .topic-card:hover {
+            transform: scale(1.05);
+            border-color: var(--accent-cyan);
+            box-shadow: 0 15px 50px rgba(0, 217, 255, 0.15);
+        }
+
+        .topic-number {
+            display: inline-block;
+            width: 40px;
+            height: 40px;
+            background: linear-gradient(135deg, var(--accent-cyan), var(--accent-purple));
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            font-size: 1.2rem;
+            margin-bottom: 1rem;
+            font-family: 'JetBrains Mono', monospace;
+        }
+
+        .topic-title {
+            font-size: 1.4rem;
+            font-weight: 700;
+            color: var(--text-primary);
+            margin-bottom: 1rem;
+        }
+
+        .subtopics {
+            list-style: none;
+            padding: 0;
+        }
+
+        .subtopics li {
+            padding: 0.7rem 0 0.7rem 1.5rem;
+            color: var(--text-secondary);
+            position: relative;
+            font-size: 0.95rem;
+            transition: color 0.2s ease;
+        }
+
+        .subtopics li::before {
+            content: '▸';
+            position: absolute;
+            left: 0;
+            color: var(--accent-cyan);
+            font-weight: bold;
+        }
+
+        .subtopics li:hover {
+            color: var(--accent-cyan);
+        }
+
+        /* Prácticas */
+        .practices-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            gap: 1.5rem;
+            margin-top: 2rem;
+        }
+
+        .practice-card {
+            background: linear-gradient(135deg, var(--bg-card), var(--bg-secondary));
+            border-radius: 12px;
+            padding: 1.5rem;
+            border: 1px solid rgba(255, 107, 53, 0.2);
+            transition: all 0.3s ease;
+            position: relative;
+        }
+
+        .practice-card::before {
+            content: attr(data-number);
+            position: absolute;
+            top: -10px;
+            right: -10px;
+            width: 35px;
+            height: 35px;
+            background: var(--accent-orange);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 800;
+            font-size: 0.9rem;
+            box-shadow: 0 4px 15px rgba(255, 107, 53, 0.4);
+        }
+
+        .practice-card:hover {
+            transform: translateY(-5px) rotate(1deg);
+            border-color: var(--accent-orange);
+            box-shadow: 0 10px 30px rgba(255, 107, 53, 0.2);
+        }
+
+        .practice-card p {
+            color: var(--text-secondary);
+            font-size: 0.95rem;
+        }
+
+        /* Evaluación */
+        .evaluation-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+            margin-top: 2rem;
+        }
+
+        .eval-item {
+            background: var(--bg-card);
+            padding: 1.2rem;
+            border-radius: 10px;
+            text-align: center;
+            border: 2px solid transparent;
+            transition: all 0.3s ease;
+        }
+
+        .eval-item:hover {
+            border-color: var(--accent-purple);
+            transform: scale(1.05);
+            box-shadow: 0 8px 25px rgba(168, 85, 247, 0.2);
+        }
+
+        .eval-icon {
+            font-size: 2rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .eval-item p {
+            color: var(--text-secondary);
+            font-size: 0.95rem;
+        }
+
+        /* Footer */
+        footer {
+            background: var(--bg-secondary);
+            padding: 3rem 5%;
+            border-top: 1px solid rgba(0, 217, 255, 0.1);
+            text-align: center;
+        }
+
+        .footer-content {
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .footer-logo {
+            font-size: 1.2rem;
+            font-weight: 700;
+            color: var(--accent-cyan);
+            margin-bottom: 1rem;
+        }
+
+        .footer-text {
+            color: var(--text-muted);
+            font-size: 0.9rem;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .hero-title {
+                font-size: 2.5rem;
+            }
+
+            .hero-subtitle {
+                font-size: 1.1rem;
+            }
+
+            .section-title {
+                font-size: 2rem;
+            }
+
+            .topics-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .practices-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .evaluation-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        @media (max-width: 480px) {
+            .hero-title {
+                font-size: 2rem;
+            }
+
+            .stat-value {
+                font-size: 2rem;
+            }
+
+            .section-title {
+                font-size: 1.5rem;
+            }
+
+            .evaluation-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="bg-animation"></div>
+
+    <header>
+        <div class="header-content">
+            <div class="logo">
+                <div class="logo-icon">&lt;/&gt;</div>
+                <div class="logo-text">
+                    <h1>Desarrollo Full Stack</h1>
+                </div>
+            </div>
+            <div class="course-code">DSH-2502</div>
+        </div>
+    </header>
+
+    <section class="hero">
+        <h2 class="hero-title">Construye el Futuro del Desarrollo Web</h2>
+        <p class="hero-subtitle">
+            Domina el desarrollo completo de aplicaciones web modernas, desde interfaces accesibles y responsivas 
+            hasta arquitecturas backend escalables con Angular, Firebase y patrones de diseño profesionales.
+        </p>
+        <div class="hero-stats">
+            <div class="stat">
+                <div class="stat-value">1-3-4</div>
+                <div class="stat-label">SATCA</div>
+            </div>
+            <div class="stat">
+                <div class="stat-value">4</div>
+                <div class="stat-label">Módulos</div>
+            </div>
+            <div class="stat">
+                <div class="stat-value">11</div>
+                <div class="stat-label">Prácticas</div>
+            </div>
+        </div>
+    </section>
+
+    <main class="container">
+        <!-- Caracterización -->
+        <section class="section">
+            <div class="section-header">
+                <div class="section-number">01</div>
+                <h2 class="section-title">Caracterización</h2>
+            </div>
+            <div class="card">
+                <p>
+                    La asignatura de Desarrollo Full Stack capacita a los estudiantes en el diseño, implementación 
+                    y gestión de aplicaciones web completas, abarcando desde la arquitectura cliente-servidor, 
+                    desarrollo front-end accesible y responsivo con HTML5, CSS3 y frameworks modernos, hasta la 
+                    aplicación de patrones de diseño en back-end y el uso de Angular, servicios RESTful, integración 
+                    con Firebase, control de versiones, y despliegue continuo para crear soluciones escalables y modernas.
+                </p>
+            </div>
+        </section>
+
+        <!-- Competencias -->
+        <section class="section">
+            <div class="section-header">
+                <div class="section-number">02</div>
+                <h2 class="section-title">Competencias</h2>
+            </div>
+            <div class="competencia-list">
+                <div class="competencia-item">
+                    <strong>Competencia Específica</strong>
+                    <p>
+                        Diseñar e implementar interfaces web accesibles, responsivas y usables, utilizando tecnologías 
+                        y frameworks actuales como HTML5, CSS3, lenguajes de lado servidor (PHP, JSP, ASP), Bootstrap 
+                        y Angular, con base en principios de usabilidad y experiencia del usuario, así como implementar 
+                        patrones de diseño en la lógica del lado servidor para construir arquitecturas sólidas, escalables 
+                        y mantenibles.
+                    </p>
+                </div>
+            </div>
+
+            <h3 style="color: var(--accent-purple); margin-top: 3rem; margin-bottom: 1.5rem; font-size: 1.8rem;">
+                Competencias Previas
+            </h3>
+            <div class="competencia-list">
+                <div class="competencia-item">
+                    <strong>Programación Orientada a Objetos</strong>
+                    <p>Fundamentos de POO y funcional, clases, objetos, herencia, encapsulamiento y estructuras de control.</p>
+                </div>
+                <div class="competencia-item">
+                    <strong>Modelado UML</strong>
+                    <p>Diagramas UML para representar estructuras y comportamientos de sistemas de software.</p>
+                </div>
+                <div class="competencia-item">
+                    <strong>Algoritmos y Estructuras de Datos</strong>
+                    <p>Resolución de problemas computacionales con algoritmos, estructuras básicas y técnicas de depuración.</p>
+                </div>
+                <div class="competencia-item">
+                    <strong>Desarrollo Web Básico</strong>
+                    <p>Fundamentos de HTML, CSS y JavaScript, comprensión del modelo cliente-servidor.</p>
+                </div>
+                <div class="competencia-item">
+                    <strong>Bases de Datos</strong>
+                    <p>Nociones básicas sobre bases de datos y operaciones CRUD (relacionales y no relacionales).</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Temario -->
+        <section class="section">
+            <div class="section-header">
+                <div class="section-number">03</div>
+                <h2 class="section-title">Temario</h2>
+            </div>
+            <div class="topics-grid">
+                <div class="topic-card">
+                    <div class="topic-number">1</div>
+                    <h3 class="topic-title">Fundamentos del Desarrollo Full Stack</h3>
+                    <ul class="subtopics">
+                        <li>Roles: Front-End, Back-End y Full Stack</li>
+                        <li>Arquitectura cliente-servidor y SDN</li>
+                        <li>Navegadores, servidores web y hosting</li>
+                        <li>Node.js, NPM, Git, VS Code</li>
+                        <li>Control de versiones con Git y GitHub</li>
+                        <li>CI/CD con GitHub Actions</li>
+                    </ul>
+                </div>
+
+                <div class="topic-card">
+                    <div class="topic-number">2</div>
+                    <h3 class="topic-title">Interfaces Web Modernas y Accesibles</h3>
+                    <ul class="subtopics">
+                        <li>HTML5 y estructura semántica</li>
+                        <li>CSS3, modelo de caja, media queries</li>
+                        <li>Bootstrap/Tailwind CSS</li>
+                        <li>Principios de accesibilidad (WCAG)</li>
+                        <li>Diseño adaptativo y responsive</li>
+                    </ul>
+                </div>
+
+                <div class="topic-card">
+                    <div class="topic-number">3</div>
+                    <h3 class="topic-title">Patrones de Diseño para Back-End</h3>
+                    <ul class="subtopics">
+                        <li>Creacionales: Singleton, Factory Method</li>
+                        <li>Estructurales: Adapter, Decorator, Composite</li>
+                        <li>Comportamiento: Observer, State</li>
+                    </ul>
+                </div>
+
+                <div class="topic-card">
+                    <div class="topic-number">4</div>
+                    <h3 class="topic-title">Desarrollo Front-End con Frameworks</h3>
+                    <ul class="subtopics">
+                        <li>Introducción a Angular</li>
+                        <li>Angular CLI: componentes y servicios</li>
+                        <li>JSON y métodos HTTP</li>
+                        <li>Firebase y Backend-as-a-Service</li>
+                        <li>Formularios reactivos y validaciones</li>
+                        <li>Ruteo y navegación entre vistas</li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+
+        <!-- Prácticas -->
+        <section class="section">
+            <div class="section-header">
+                <div class="section-number">04</div>
+                <h2 class="section-title">Prácticas</h2>
+            </div>
+            <div class="practices-grid">
+                <div class="practice-card" data-number="1">
+                    <p>Instalación de Node.js, Git y Visual Studio Code</p>
+                </div>
+                <div class="practice-card" data-number="2">
+                    <p>Página de presentación con etiquetas semánticas</p>
+                </div>
+                <div class="practice-card" data-number="3">
+                    <p>Menú adaptable con Tailwind o Bootstrap</p>
+                </div>
+                <div class="practice-card" data-number="4">
+                    <p>Mejora de accesibilidad con ARIA y navegación por teclado</p>
+                </div>
+                <div class="practice-card" data-number="5">
+                    <p>Implementación de Factory Method para usuarios</p>
+                </div>
+                <div class="practice-card" data-number="6">
+                    <p>Patrón Adapter para integración de API</p>
+                </div>
+                <div class="practice-card" data-number="7">
+                    <p>Sistema de notas con patrón Decorator</p>
+                </div>
+                <div class="practice-card" data-number="8">
+                    <p>Componentes Angular y servicio compartido</p>
+                </div>
+                <div class="practice-card" data-number="9">
+                    <p>Consumo de API REST con métodos HTTP</p>
+                </div>
+                <div class="practice-card" data-number="10">
+                    <p>Formulario con validaciones reactivas</p>
+                </div>
+                <div class="practice-card" data-number="11">
+                    <p>Ruteo entre vistas en Angular</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Evaluación -->
+        <section class="section">
+            <div class="section-header">
+                <div class="section-number">05</div>
+                <h2 class="section-title">Evaluación</h2>
+            </div>
+            <div class="evaluation-grid">
+                <div class="eval-item">
+                    <div class="eval-icon">📝</div>
+                    <p>Examen escrito</p>
+                </div>
+                <div class="eval-item">
+                    <div class="eval-icon">💻</div>
+                    <p>Prácticas de laboratorio</p>
+                </div>
+                <div class="eval-item">
+                    <div class="eval-icon">🚀</div>
+                    <p>Proyecto integrador</p>
+                </div>
+                <div class="eval-item">
+                    <div class="eval-icon">🎯</div>
+                    <p>Rúbricas de evaluación</p>
+                </div>
+                <div class="eval-item">
+                    <div class="eval-icon">📚</div>
+                    <p>Investigación documental</p>
+                </div>
+                <div class="eval-item">
+                    <div class="eval-icon">🏆</div>
+                    <p>Participación en eventos</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Fuentes -->
+        <section class="section">
+            <div class="section-header">
+                <div class="section-number">06</div>
+                <h2 class="section-title">Bibliografía</h2>
+            </div>
+            <div class="card">
+                <ul class="subtopics">
+                    <li>Jon Duckett (2022). JavaScript y jQuery: Desarrollo web interactivo. Anaya Multimedia</li>
+                    <li>Jon Duckett (2021). Diseño web con HTML y CSS. Anaya Multimedia</li>
+                    <li>David Mark Clements (2020). Node.js. Desarrollo de aplicaciones web. Anaya Multimedia</li>
+                    <li>José Carlos López (2021). APIs RESTful. Diseño y desarrollo de servicios web. Marcombo</li>
+                    <li>Carlos Azaustre (2022). Desarrollador Full Stack: Guía completa para dominar el desarrollo web</li>
+                    <li>Jorge Escobar (2023). Desarrollo web Full Stack con JavaScript. MongoDB, React, Node.js</li>
+                </ul>
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <div class="footer-content">
+            <div class="footer-logo">Tecnológico Nacional de México</div>
+            <p class="footer-text">
+                Instituto Tecnológico Superior de Osorio | Ingeniería Informática<br>
+                Especialidad en Desarrollo de Software con Tecnologías Avanzadas
+            </p>
+        </div>
+    </footer>
+
+    <script>
+        // Smooth scroll for better UX
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                }
+            });
+        });
+
+        // Add parallax effect to background
+        window.addEventListener('scroll', () => {
+            const scrolled = window.pageYOffset;
+            const bgAnimation = document.querySelector('.bg-animation');
+            bgAnimation.style.transform = `translateY(${scrolled * 0.3}px)`;
+        });
+
+        // Intersection Observer for animations
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: '0px 0px -50px 0px'
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.style.opacity = '1';
+                    entry.target.style.transform = 'translateY(0)';
+                }
+            });
+        }, observerOptions);
+
+        document.querySelectorAll('.card, .topic-card, .practice-card').forEach(el => {
+            observer.observe(el);
+        });
+    </script>
+</body>
+</html>
